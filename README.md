@@ -25,6 +25,8 @@ With our application, they could . .  .
 1. Who uses the module aspect of the platform? Is it a developer, someone who is trained and technically savvy but not necessarily a developer or sys-admin, or is it someone with little technical experience who perhaps spends more time in a managerial position determining how much money to send to which project? The answer to this question should heavily impact the way the modules are designed. For example, if the users are developers or tech-savy people they could resemble queries to `Splunk`, which allow users to search multiple databases in useful ways and analyze them within a SQL-like query. Or perhaps the users aren't tech-savy and boxes displaying dollar amounts and graphs would be more useful.
 2. How do the modules actually help? They need to somehow enable people to respond more quickly to disasters. How long does it normally take, where is most of that time spent, what has been the effect of open-source, real-time information like the Facebook API? Where does the disconnect between information gathering and carrying out a plan come from and how can we minimize that disconnect with these modules?
 
+## Feature List
+
 ## Program Architecture
 
 ## Sources
