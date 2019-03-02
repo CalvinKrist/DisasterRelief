@@ -1,0 +1,1 @@
+web: gunicorn disasterrest.wsgi:application --log-file -
