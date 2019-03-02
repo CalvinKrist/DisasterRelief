@@ -5,14 +5,16 @@
 Queries consist of trees which are grouped logically. All leaf's are a query itself, while nodes are logical groupings of queries. Assuming the queries a, b, c, and d, the organization is shown below:
 
 a && b && (c || d)
+
 ![Example Tree](images/logical1.png "Example Tree")
 
 A single query with no logical operators can be its own node. 
 
 Logical operators:
-	* `and`: returns the intersection of all queries.
-	* `or`: returns the union of all queries.
-	* `not`: returns the complement of all queries. This is a special case because it can only operate on a single query. Thus it can only have one child, which is either a query o a logical operator.
+
+* `and`: returns the intersection of all queries.
+* `or`: returns the union of all queries.
+* `not`: returns the complement of all queries. This is a special case because it can only operate on a single query. Thus it can only have one child, which is either a query o a logical operator.
 
 ## Query Format
 
