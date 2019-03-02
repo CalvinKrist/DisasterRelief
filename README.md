@@ -5,7 +5,11 @@
 
 Even with a growing amount of open source real-time information on the effects of natural disasters, it's difficult to plan and allocate resources for disaster relief. 
 
-Why?????
+With the recent spike in natural disasters, acquiring real time data about the natural disaster alone is not sufficient in providing the necessary responsiveness, resources, and bandwidth to deal with the repercussions. Disaster preparedness and relief applications need to provide not only real-time data of the disaster, but also need to account for the lack of communication, the amount of resources needed in affected areas, subsequent relief actions that need to be taken, and an efficient exchange between the victims and the rescuers in a time of need. 
+
+Existing disaster relief applications successfully provide real time tracking of the disaster, but fail to bridge the gap between "assessing the affected area" and then "taking appropriate subsequent actions" quick and efficiently and relaying this information back to a central database. Modern emergency management systems fail in their design to provide a constant, reliable communication system between victims and rescuers, and lack a cohesive program for bridging the gap between real-time rescue and relief efforts. 
+
+Disaster preparedness and response can be viewed as three independent problems: assessing the disaster relief area, determining the amount of resources/what resources are needed on the basis of reliable communication between the victim and the rescuers in real-time, and then quickly communicating that information back to a central database. Existing disaster relief applications only target the first problem, failing to provide a cohesive system that connect real-time tracking the relief response.
 
 ## Solution Description
 
