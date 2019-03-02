@@ -19,5 +19,6 @@ import api.views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('test', views.search_database)
+    path('search', views.search_database),
+    path('search/', views.search_database)
 ]

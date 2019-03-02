@@ -68,7 +68,7 @@ The logical tree search structure can also be used to query according to multipl
 		},
 		{
 			"country" : {
-				"operator" = "not",
+				"operator" = "or",
 				"matches" : ["Mexico", "Puerto Rico"]
 			}
 		}
