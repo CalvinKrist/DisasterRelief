@@ -97,7 +97,7 @@ This one is unique to the `date_created` parameter. It's used to get all alerts 
 ```
 {
 	"date_created" : {
-		"within" : "city"
+		"within" : ["2018-12-19 00:00:00", "2019-11-19 00:00:00"]
 	}
 }
 ```
