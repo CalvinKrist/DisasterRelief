@@ -14,6 +14,7 @@ class MediaAlert(models.Model):
     # Optional fields (not guarunteed to exist)
     date_created      = models.DateTimeField(blank=True)
     location_name     = models.CharField(max_length=255, blank=True)
+    country           = models.CharField(max_length=255, blank=True)
     geo_location      = models.OneToOneField(GeoLocation, on_delete=models.SET_NULL, blank=True,
                                              related_name='geo_location', null=True)
     disaster_severity = models.CharField(max_length=255, blank=True) # low, medium, high -- we ignore 'none' as best we can
