@@ -25,7 +25,7 @@ SECRET_KEY = 'z$)c*6fsurrc01^qsc0s_$#9j&hnmqtf#qg0$+2)%m7+(0@2q#'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['hoos-disaster-relief.herokuapp.com', 'localhost']
 
 
 # Application definition
