@@ -43,6 +43,11 @@ The scope and requirements for disaster relief vary with each disaster. As a res
 
 ## Feature List
 
+----ideas: 3 part system that consists of 
+     1. Assessment of the situation (this will be the part about pulling data from sources), 
+     2. Analyzing collected data to make a recommendation on amount of resources needed, damage done, priority affected areas           (population based). 
+     3. Relaying information back to first responders
+
 ## Program Architecture
 
 ## Sources
