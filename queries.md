@@ -68,7 +68,7 @@ The logical tree search structure can also be used to query according to multipl
 		},
 		{
 			"country" : {
-				operator = "not",
+				"operator" = "not",
 				"matches" : ["Mexico", "Puerto Rico"]
 			}
 		}
@@ -110,7 +110,7 @@ This keyword applies for the `geo_location` parameter. For GPS coordinates, it's
 {
 	"geo_location" : {
 		"precision" : 2,
-		operator : "or",
+		"operator" : "or",
 		"matches" : [(28.45, 42.11), (11.11, 12.12), (16.25, 25.16)]
 	}
 }
