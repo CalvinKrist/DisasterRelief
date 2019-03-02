@@ -1,4 +1,4 @@
-# Disaster Releif
+# Disaster Relief
 ### HoosHacks, 2-28-2019
 
 ## Problem Description
