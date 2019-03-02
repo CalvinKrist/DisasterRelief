@@ -13,7 +13,12 @@ Disaster preparedness and response can be viewed as three independent problems: 
 
 ## Solution Description
 
-A system that can aggregate data from a variety of sources, provide programmer access to the data, and allow programmers to implement modules to analyze and display information as desired.
+The scope and requirements for disaster relief vary with each disaster. As a result, there is not a single cohesive system that can provide a personalized approach to disaster relief for each situation. Each disaster relief procedure will vary depending on the magnitude of the disaster, the economic profile of the affected area, and the existing resources and technology that already serve as disaster relief measures. 
+
+(name of application) provides developers with a system that can aggregate real time data about the disaster from a variety of sources giving the developer access to analyze it, and implement individualized applications and modules on the basis of analysis that quickly address the situation. Currently, there are many existing APIs that provide real time tracking of the natural disaster, but there is no central database where this information can be collected and analyzed quickly and efficiently in order to take appropriate action in response to a disaster. In the case of a natural disaster, a recommendation on the amount of resources needed is dependent not only on the magnitude of the disaster, but also on the economic profile of the area, the population, and the existing resources present in the area. As a result, (name of application) would provide a fast and efficient way to pool the data into a central database giving the developer access to analyze the data, quickly identify the targeted and affected areas to facilitate efficient communication between the victims and the rescuers, and provide a recommendation to first responders on the amount of resources that are needed. 
+
+(name of application) is targeting and addressing the three problems outlined in the Problem Description: accurate assessment, efficient communication between the victims and the rescuers, and efficient communication of the reccommended assesment back to first responders to take appropriate action. 
+
 
 ### Use Case:
 
