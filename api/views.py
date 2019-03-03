@@ -81,7 +81,7 @@ def add_to_database(request):
 # Retuns HTML. Intended to be used as a website page.
 @api_view(['POST'])
 def search_database_web(request):
-    return HttpResponse()
+    return HttpResponse(request.body)
 
 def load_file(file_path):
     with open(file_path, 'rb') as file_obj:

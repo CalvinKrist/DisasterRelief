@@ -5,4 +5,3 @@ django-bootstrap4==0.0.7
 django-rest-framework
 djangorestframework
 whitenoise
-mysql-python

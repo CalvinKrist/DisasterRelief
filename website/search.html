@@ -53,11 +53,15 @@
 		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">
 			<!-- real url: https://hoos-disaster-relief.herokuapp.com/ -->
 			
-				<div class="form-group">
-					<label for="exampleFormControlTextarea1">API Query Example</label>
-					<textarea class="form-control" id="searchRequestBox" rows="3"></textarea>
-					<button class="btn btn-lg btn-primary btn-block" onclick="updateSearchPage();">Search</button>
-				</div>
+			<div class="form-group">
+				<label for="exampleFormControlTextarea1">API Query Example</label>
+				<textarea class="form-control" id="searchRequestBox" rows="3"></textarea>
+				<button class="btn btn-lg btn-primary btn-block" onclick="updateSearchPage();">Search</button>
+			</div>
+			
+			<div id="searchResponse">
+				
+			</div>
 			
 		
 		<footer class="mastfoot mt-auto navbar-fixed-bottom" id="document-footer">
@@ -65,6 +69,7 @@
 		</div>
 		
 	</div>
+	
 	<script src="js/main.js"></script>
 	<!-- Load home.html AFTER <div id="content-view"></div> has loaded-->
 
