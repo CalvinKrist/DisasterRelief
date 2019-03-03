@@ -15,7 +15,10 @@ def scrape():
     TIMES = []
     URLS = []
 
-    DATA_PATH = os.path.join(os.getcwd(), 'TweetScraper/Data/tweet')
+    DATA_PATH = os.path.dirname(os.getcwd()) # image-classification
+    DATA_PATH = os.path.dirname(DATA_PATH) # Image-Classification-Final-Suite
+    DATA_PATH = os.path.dirname(DATA_PATH) # DisasterRelief
+    DATA_PATH = os.path.join(DATA_PATH, 'TweetScraper/Data/tweet')
     for file in os.listdir(DATA_PATH):
         with open(os.path.join(DATA_PATH, file), 'rt') as f:
             PIC_URLS.append(PIC_REGEX.findall(f.read())[0])
