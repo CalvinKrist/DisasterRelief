@@ -44,10 +44,10 @@
 						<ul class="navbar-nav mr-auto">
 							<li class="nav-item">
 								<!--Navigation bar 'home' and 'search' fields-->
-								<a class="nav-link" href='home'; id="home-page-link">Home</a>
+								<a class="nav-link" href='/home'; id="home-page-link">Home</a>
 							</li>
 							<li class="nav-item active">
-								<a class="nav-link" href='documentation'; id="config-page-link">Documentation<span class="sr-only" id="selected-nav-page">(current)</span></a>
+								<a class="nav-link" href='/tutorial'; id="config-page-link">Tutorial<span class="sr-only" id="selected-nav-page">(current)</span></a>
 							</li>
 						</ul>
 					</div>
@@ -58,7 +58,7 @@
 		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">
 			<!-- real url: https://hoos-disaster-relief.herokuapp.com/ -->
 			
-			<h1 class="float-left"> API Documentation </h1>
+			<h1 class="float-left"> Searching Tutorial </h1>
 			
 			</br></br><hr class="style1">
 			<h3 class="float-left"> Schema </h2>
@@ -163,14 +163,12 @@
 					</p>
 				</code>
 
-
-
-
-				
+			Below is a live tool that allows you to submit live JSON queries and see the result. This could be helpful for debugging your own code, or just for learning more about the syntax of the queries. We highly encourage you to play around with it!
 			</div>
+			<br>
 			<div class="form-group">
 				<h2> Query the API </h2>
-				<textarea class="form-control" id="searchRequestBox" rows="5"></textarea>
+				<textarea class="form-control" id="searchRequestBox" rows="6"></textarea>
 				<button class="btn btn-lg btn-primary btn-block" onclick="updateSearchPage();">Search</button>
 			</div>
 			
@@ -178,6 +176,7 @@
 				
 			</div>
 			
+		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">			
 		
 		<footer class="mastfoot mt-auto navbar-fixed-bottom" id="document-footer">
 		</footer>

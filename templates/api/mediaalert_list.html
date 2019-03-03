@@ -22,7 +22,7 @@
 	{% for alert in alert_list %}
 	<div class="card">
 		<div class="container">
-			<p>{{ alert.id }}</p>
+			<h2>Alert {{ alert.id }}</h2>
 			<p>{{ alert.source_type }}</p>
 			<p>{{ alert.url }}</p>
 			<p>{{ alert.disaster_type }}</p>
@@ -34,6 +34,7 @@
 			<p>{{ alert.tags }}</p>
 		</div>
 	</div>
+	<hr>
 	{% endfor %}
 </ul>
 {% endblock %}
