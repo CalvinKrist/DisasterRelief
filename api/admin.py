@@ -1,7 +1,7 @@
 from django.contrib import admin
 
 # Register your models here.
-import api.models.MediaAlert as MediaAlert
+from . models import MediaAlert
 
 @admin.register(MediaAlert)
 class MediaAmin(admin.ModelAdmin):
