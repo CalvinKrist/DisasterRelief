@@ -114,20 +114,26 @@ def add_to_database(request):
             print("dateimte format " + json_request["date_created"] + " incorrect: " + str(e))
             return Response("dateimte format " + json_request["date_created"] + " incorrect: " + str(e))
     if "location_name" in json_request.keys():
+        print("location_name found: " + json_request["location_name"])
         alert.location_name = json_request["location_name"]
     if "country" in json_request.keys():
+        print("country found: " + json_request["country"])
         alert.country = json_request["country"]
     # Request in format "latitude,longitude"
     if "geo_location" in json_request.keys():
+        print("geo_location found: " + json_request["geo_location"])
         points = json_request["geo_location"]
         geo_model = models.GeoLocation(latitude=points[0], longitude=points[1])
         geo_model.save()
         alert.geo_location = geo_model
     if "disaster_severity" in json_request.keys():
+        print("disaster_severity found: " + json_request["disaster_severity"])
         alert.disaster_severity = json_request["disaster_severity"]
     if "tags" in json_request.keys():
+        print("tags found: " + json_request["tags"])
         alert.tags = json_request["tags"]
 
+    print("Entry saved to database.")
     alert.save()
 
     return Response("Success")
