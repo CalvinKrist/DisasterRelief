@@ -11,6 +11,9 @@ import numpy as np
 import tensorflow as tf
 
 
+from scrape_tweets import scrape
+
+
 def run_quickstart(file_name):
     import io
     import os
@@ -42,9 +45,10 @@ def run_quickstart(file_name):
         else:
             labelsTags.append(label.description)
 
-
-
-
+    labelsFiltStr = ','.join(labelsFiltered.split(", "))
+    labelsTagsStr = ','.join(labelsFiltered.split(", "))
+    
+    return labelsFiltStr, labelsTagsStr
 
 
 def load_graph(model_file):
@@ -91,9 +95,8 @@ def load_labels(label_file):
   return label
 
 
-
-
 if __name__ == "__main__":
+
   file_name = "tf_files/disaster_images.jpg"
   model_file = "tf_files/retrained_graph.pb"
   label_file = "tf_files/retrained_labels.txt"
@@ -135,6 +138,15 @@ if __name__ == "__main__":
   if args.output_layer:
     output_layer = args.output_layer
 
+  tweets = scrape()
+  for tweet in tweets:
+    path = os.path.join(os.getcwd(), "media_images/" + tweet["pic"])
+    print(run_quickstart(path))
+    print(tens_Two(path))
+
+
+
+def tens_Two(file_name):
   graph = load_graph(model_file)
   t = read_tensor_from_image_file(file_name,
                                   input_height=input_height,
@@ -144,8 +156,8 @@ if __name__ == "__main__":
 
   input_name = "import/" + input_layer
   output_name = "import/" + output_layer
-  input_operation = graph.get_operation_by_name(input_name);
-  output_operation = graph.get_operation_by_name(output_name);
+  input_operation = graph.get_operation_by_name(input_name)
+  output_operation = graph.get_operation_by_name(output_name)
 
   with tf.Session(graph=graph) as sess:
     start = time.time()
@@ -156,7 +168,6 @@ if __name__ == "__main__":
 
   top_k = results.argsort()[-5:][::-1]
   labels = load_labels(label_file)
-  print("labels: ", labels)
 
   print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
   template = "{} (score={:0.5f})"
@@ -169,13 +180,9 @@ if __name__ == "__main__":
   for j in range(0, len(results)):
     if (results[j]==maxResult):
         condition = labels[j]
-  print("condition" , condition)
+
+  return condition
 
 
-
-    
-
-
-  run_quickstart(file_name)
 
 
