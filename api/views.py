@@ -34,8 +34,9 @@ class AlertList(ListView):
 
             # Replace geo_location objects with actual values. drop id
             for result in list_result:
-                result["geo_location"] = models.GeoLocation.objects.get(id=result["geo_location_id"])
-                del result["geo_location_id"]
+                if "geo_location_id" in result:
+                    result["geo_location"] = models.GeoLocation.objects.get(id=result["geo_location_id"])
+                    del result["geo_location_id"]
 
             context = {'alert_list' : list_result}
 

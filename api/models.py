@@ -395,8 +395,7 @@ class SearchTree:
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
                     if len(matches_val != 1):
-                        raise SyntaxException(
-                            "error in 'disaster_severity' child node: 'not' operator used with more than one value")
+                        raise SyntaxException("error in 'disaster_severity' child node: 'not' operator used with more than one value")
                     return ~Q(disaster_severity=matches_val[0])
 
                 # Handle other operators
