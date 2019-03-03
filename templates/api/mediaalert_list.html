@@ -1,17 +1,39 @@
+<style>
+	.card {
+		/* Add shadows to create the "card" effect */
+		box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2);
+		transition: 0.3s;
+	}
+
+	/* On mouse-over, add a deeper shadow */
+	.card:hover {
+		box-shadow: 0 8px 16px 0 rgba(0, 0, 0, 0.2);
+	}
+
+	/* Add some padding inside the card container */
+	.container {
+		padding: 2px 16px;
+	}
+</style>
+
 {% block content %}
-    <h2>Alerts</h2>
-    <ul>
-        {% for alert in alert_list %}
-			<li>{{ alert.id }}</li>
-            <li>{{ alert.source_type }}</li>
-			<li>{{ alert.url }}</li>
-			<li>{{ alert.disaster_type }}</li>
-			<li>{{ alert.date_created }}</li>
-			<li>{{ alert.location_name }}</li>
-			<li>{{ alert.country }}</li>
-			<li>{{ alert.geo_location.latitude }}, {{ alert.geo_location.longitude }}</li>
-			<li>{{ alert.disaster_severity }}</li>
-			<li>{{ alert.tags }}</li>
-        {% endfor %}
-    </ul>
+<h2>Alerts</h2>
+<ul>
+	{% for alert in alert_list %}
+	<div class="card">
+		<div class="container">
+			<p>{{ alert.id }}</p>
+			<p>{{ alert.source_type }}</p>
+			<p>{{ alert.url }}</p>
+			<p>{{ alert.disaster_type }}</p>
+			<p>{{ alert.date_created }}</p>
+			<p>{{ alert.location_name }}</p>
+			<p>{{ alert.country }}</p>
+			<p>{{ alert.geo_location.latitude }}, {{ alert.geo_location.longitude }}</p>
+			<p>{{ alert.disaster_severity }}</p>
+			<p>{{ alert.tags }}</p>
+		</div>
+	</div>
+	{% endfor %}
+</ul>
 {% endblock %}
