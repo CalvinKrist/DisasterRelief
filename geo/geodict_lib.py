@@ -14,19 +14,26 @@
 #    You should have received a copy of the GNU General Public License
 #    along with this program.  If not, see <http://www.gnu.org/licenses/>.
 
-import MySQLdb, string, StringIO
-import geodict_config
+import MySQLdb, string, io.StringIO
+import zipfile
+import os
+import geo.geodict_config
 from tempfile import TemporaryFile
 from struct import unpack, pack, calcsize
 
 # The main entry point. This function takes an unstructured text string and returns a list of all the
 # fragments it could identify as locations, together with lat/lon positions
 def find_locations_in_text(text):
+    if not os.path.exists("source_data/worldcitiespop.csv"):
+        zip_ref = zipfile.ZipFile("source_data/worldcitiespop.zip", 'r')
+        zip_ref.extractall("source_data")
+        zip_ref.close()
+    return
 
     try:
         cursor = get_database_connection()
     except:
-        print "Database connection failed. Have you set up geodict_config.py with your credentials?"
+        print("Database connection failed. Have you set up geodict_config.py with your credentials?")
         return None
 
     current_index = len(text)-1

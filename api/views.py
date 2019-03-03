@@ -3,6 +3,7 @@ from rest_framework.response import Response
 import json
 import api.models as models
 from datetime import datetime
+from django.http import HttpResponse
 
 # Used to search the database with JSON object
 # Returns the objects as a JSON.
@@ -80,23 +81,37 @@ def add_to_database(request):
 # Retuns HTML. Intended to be used as a website page.
 @api_view(['POST'])
 def search_database_web(request):
-    # Make sure query isn't empty
-    if request.body == b'':
-        return Response( {"detail" : "Invalid request: empty request"} )
+    return HttpResponse()
 
-    if request.method == 'POST':
-        # Load request as a dict object
-        json_request = None
-        try:
-            json_request = json.loads(request.body)
-        except:
-            return Response( {"detail" : "Invalid request: invalid JSON"} )
+def load_file(file_path):
+    with open(file_path, 'rb') as file_obj:
+        file = file_obj.read()
 
-        return models.handle_search_from_json(json_request)
+    return file
 
-    '''elif request.metod == 'GET':
-        # Make sure query isn't empty
-        if request.body == b'':
-            return Response({"detail": "Invalid request: empty request"})
+def load_web_resource(request, resource):
+    file = load_file('website/' + resource)
+    extension = resource.split(".")[-1]
 
-        return models.handle_search_from_string(request.body)'''
+    if extension == "png":
+        return HttpResponse(file, content_type="image/png")
+    elif extension == "jpg":
+        return HttpResponse(file,content_type="image/jpg")
+    elif extension == "svg":
+        return HttpResponse(file,content_type="image/svg")
+    elif extension == "css":
+        return HttpResponse(file,content_type="text/css")
+
+    return HttpResponse(file)
+
+@api_view(['GET'])
+def web_resource(request, resource):
+    return load_web_resource(request, resource)
+
+@api_view(['GET'])
+def get_home(request):
+    return load_web_resource(request, "index.html")
+
+@api_view(['GET'])
+def get_search(request):
+    return load_web_resource(request, "search.html")

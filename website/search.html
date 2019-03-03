@@ -1,0 +1,72 @@
+<!doctype html>
+<html lang="en">
+	<head>
+		<!-- Required meta tags -->
+		<meta charset="utf-8">
+		<meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+		<!-- Material Design for Bootstrap fonts and icons -->
+		<link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto:300,400,500,700|Material+Icons">
+
+		<!-- Material Design for Bootstrap CSS -->
+		<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
+
+		<title>Clear Skies</title>
+		
+		<style type="text/css">
+			a:hover {
+				cursor:pointer;
+			}
+		</style>
+	</head>
+	<body class="text-center">
+	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
+	<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"></script>
+	<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"></script>
+
+	<div class="cover-container d-flex h-100 mx-auto flex-column">
+		<header >
+			<nav id="main-nav-bar" class="nav navbar sticky-top navbar-expand-lg navbar-dark bg-success" style="background-color: #e3f2fd;">
+				<div class="container">
+					<a class="navbar-brand" href="home">
+						<img src="images/logo.png" width="50" height="50" class="d-inline-block align-middle" alt="">
+						Clear Skies
+					</a>
+					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
+						<span class="navbar-toggler-icon"></span>
+					</button>
+
+					<div class="collapse navbar-collapse" id="navbarColor01">
+						<ul class="navbar-nav mr-auto">
+							<li class="nav-item">
+								<a class="nav-link" href='home'); id="home-page-link">Home</a>
+							</li>
+							<li class="nav-item active">
+								<a class="nav-link" href='search'; id="config-page-link">Search<span class="sr-only" id="selected-nav-page">(current)</span></a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</nav>
+		</header>
+		
+		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">
+			<!-- real url: https://hoos-disaster-relief.herokuapp.com/ -->
+			
+				<div class="form-group">
+					<label for="exampleFormControlTextarea1">API Query Example</label>
+					<textarea class="form-control" id="searchRequestBox" rows="3"></textarea>
+					<button class="btn btn-lg btn-primary btn-block" onclick="updateSearchPage();">Search</button>
+				</div>
+			
+		
+		<footer class="mastfoot mt-auto navbar-fixed-bottom" id="document-footer">
+		</footer>
+		</div>
+		
+	</div>
+	<script src="js/main.js"></script>
+	<!-- Load home.html AFTER <div id="content-view"></div> has loaded-->
+
+</body>
+</html>
