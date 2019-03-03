@@ -57,12 +57,25 @@ if __name__ == "__main__":
   file_name = "tf_files/flower_photos/daisy/3475870145_685a19116d.jpg"
   model_file = "tf_files/retrained_graph.pb"
   label_file = "tf_files/retrained_labels.txt"
-  input_height = 224
-  input_width = 224
+  input_height = 229
+  input_width = 229
   input_mean = 128
   input_std = 128
-  input_layer = "input"
+  input_layer = "Mul"
   output_layer = "final_result"
+  
+  
+  parser = argparse.ArgumentParser()
+  parser.add_argument("--image", help="image to be processed")
+  parser.add_argument("--graph", help="graph/model to be executed")
+  parser.add_argument("--labels", help="name of file containing labels")
+  parser.add_argument("--input_height", type=int, help="input height")
+  parser.add_argument("--input_width", type=int, help="input width")
+  parser.add_argument("--input_mean", type=int, help="input mean")
+  parser.add_argument("--input_std", type=int, help="input std")
+  parser.add_argument("--input_layer", help="name of input layer")
+  parser.add_argument("--output_layer", help="name of output layer")
+  args = parser.parse_args()
 
   if args.graph:
     model_file = args.graph
