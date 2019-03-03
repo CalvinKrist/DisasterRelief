@@ -319,7 +319,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException("error in 'source_type' child node: 'not' operator used with more than one value")
                     latitude = matches_val[0][0]
                     longitude = matches_val[0][1]
@@ -394,7 +394,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException("error in 'disaster_severity' child node: 'not' operator used with more than one value")
                     return ~Q(disaster_severity=matches_val[0])
 
@@ -427,7 +427,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException(
                             "error in 'tags' child node: 'not' operator used with more than one value")
                     return ~Q(tags=matches_val[0]) if arg == "matches" else ~Q(tags__icontains=matches_val[0])
