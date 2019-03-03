@@ -139,7 +139,33 @@
 							}<br>
 					</p>
 				</code>
-				6. The queries can also be defined by arguments other than "matches"
+				6. The queries can also be defined by arguments other than <code>matches</code>. </br></br>
+				7. Argument: <code>CONTAINS</code> can be used for both the <code>location_name</code> and the <code>tags</code> properties, they can be searched based on whether or not they contain a string. The example below returns all objects that have a tag containing the word 'city'. The comparisons are case insensitive.
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"tags" : {<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"contains" : "city"<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+					</p>
+				</code>
+				8. Argument: <code>PRECISION</code> can be applied for the <code>geo_location</code> parameter. For GPS coordinates,, you are required to search to within a certain decimal precision. The example below searches to the second decimal place, so the coordinates (30.1234, 30.5678) would be treated as (30.12, 30.57) for the purposes of the search. Note that the numbers do get rounded.
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"geo_location" : {<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"precision" : 2,<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"operator" : 2,<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matches" : [(28.45, 42.11), (11.11, 12.12), (16.25, 25.16)]<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+					</p>
+				</code>
+
+
+
+
 				
 			</div>
 			<div class="form-group">
