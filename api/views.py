@@ -37,7 +37,6 @@ class AlertList(ListView):
                 if "geo_location_id" in result:
                     try:
                         result["geo_location"] = models.GeoLocation.objects.get(id=result["geo_location_id"])
-                        del result["geo_location_id"]
                     except:
                         pass
 
