@@ -43,9 +43,13 @@ class AlertList(ListView):
 
             context = {'alert_list' : list_result}
 
+            print("rendinering")
+
+            if len(list_result) == 0:
+                return HttpResponse("<h1>No Results Found<h1>")
             return render(request, self.template_name, context)
-        except models.MediaAlert.DoesNotExist:
-            return HttpResponse( {} )
+        except models.MediaAlert.DoesNotExist as e:
+            return HttpResponse( "MediaAlter Does not Exist: " + str(e) )
         except models.SyntaxException as e:
             return HttpResponse("<h1> Syntax Error: </h1></br></br><h3>" + str(e) + "</h3>")
     '''
