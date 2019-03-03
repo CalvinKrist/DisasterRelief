@@ -64,81 +64,84 @@
 			<h3 class="float-left"> Schema </h2>
 			</br></br>
 			
-			API requests all consist of <code>POST</code> requests that send a JSON object to the <code>api/search</code> endpoint. The JSON objects enable the expression of complicated logical operations so that they can query for exactly the data they need.</br>
-			
-			1. The basic format of a request is a parameter followed by one or more arguments. 
-			<code>
-			<p class="text-justify">
-			{ <br>
-				"parameter" : { <br>
-					"argument" : "value" <br>
-			    } <br>
-			} <br>
-			</p>
-			</code>
-			2. A simple example of an argument "matches" and a value "facebook" is shown below:
-			<code>
-				<p>
-						{
-							"source_type" : {
-								"matches" : "facebook"
-							}
-						}
+			<div id="tutorial" class="text-justify">
+				API requests all consist of <code>POST</code> requests that send a JSON object to the <code>api/search</code> endpoint. The JSON objects enable the expression of complicated logical operations so that they can query for exactly the data they need.</br>
+				
+				1. The basic format of a request is a parameter followed by one or more arguments. 
+				<code>
+				<p class="text-justify">
+				{ <br>
+					&nbsp;&nbsp;&nbsp;&nbsp;"parameter" : { <br>
+						&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"argument" : "value" <br>
+					&nbsp;&nbsp;&nbsp;&nbsp;} <br>
+				} <br>
 				</p>
-			</code>
-			3. Another simple example is to search for all alerts that come from both facebook and twitter. This requires two instantiations of the format detailed above: 
-			<code>
-				<p>
-						{
-							"operator" : "or",
-							"queries" : [
-								{
-									"source_type" : {
-										"matches" : "facebook"
-									}
-								},
-								{
-									"source_type" : {
-										"matches" : "twitter"
-									}
-								},
-							],
-						}
-				</p>
-			</code>
-			4. This format, however, does not work for longer lists of values so there is a syntactical shorthand that can be used where within the parameter an operator is given and then a list of values as detailed in the example below: 
-			<code>
-				<p>
-						{
-							"source_type" : {
-								"operator" : "or",
-								"matches" : ["twitter", "facebook"]
-							}
-						}
-				</p>
-			</code>
-			5. The standard format can also be expanded to include multiple arguments for specific values:
-			<code>
-				<p>
-						{
-							"operator" : "and",
-							"queries" : [
-								{
-									"source_type" : {
-										"matches" : "twitter"
-									}
-								},
-								{
-									"country" : {
-										"operator" = "or",
-										"matches" : ["Mexico", "Puerto Rico"]
-									}
-								}
-							]
-						}
-				</p>
-			</code>
-			6. The queries can also be defined by arguments other than "matches"
+				</code>
+				2. A simple example of an argument "matches" and a value "facebook" is shown below:
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"source_type" : {<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matches" : "facebook"<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+					</p>
+				</code>
+				3. Another simple example is to search for all alerts that come from both facebook and twitter. This requires two instantiations of the format detailed above: 
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"operator" : "or",<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"queries" : [<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"source_type" : {<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	"matches" : "facebook"<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	}<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"source_type" : {<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;	"matches" : "twitter"<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;],<br>
+							}<br>
+					</p>
+				</code>
+				4. This format, however, does not work for longer lists of values so there is a syntactical shorthand that can be used where within the parameter an operator is given and then a list of values as detailed in the example below: 
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"source_type" : {<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"operator" : "or",<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matches" : ["twitter", "facebook"]<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+					</p>
+				</code>
+				5. The standard format can also be expanded to include multiple arguments for specific values:
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"operator" : "and",<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"queries" : [<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"source_type" : {<br>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matches" : "twitter"<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;},<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;{<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"country" : {<br>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"operator" = "or",<br>
+											&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matches" : ["Mexico", "Puerto Rico"]<br>
+										&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;]<br>
+							}<br>
+					</p>
+				</code>
+				6. The queries can also be defined by arguments other than "matches"
+				
+			</div>
 			<div class="form-group">
 				<h2> Query the API </h2>
 				<textarea class="form-control" id="searchRequestBox" rows="5"></textarea>
