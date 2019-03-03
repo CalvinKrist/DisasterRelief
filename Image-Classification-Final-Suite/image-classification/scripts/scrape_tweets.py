@@ -4,7 +4,7 @@ import subprocess
 
 
 def scrape():
-    subprocess.call("./scrapeTweets.sh")
+    # subprocess.call("./scrapeTweets.sh")
 
     PIC_REGEX = re.compile(r'pic.twitter.com/[^\s"]+')
     TEXT_REGEX = re.compile(r'"text": "[^",]+')
@@ -45,9 +45,9 @@ def scrape():
     for i in range(0, len(PIC_URLS)):
         RESP.append({
             "pic": "img" + str(i+1) + ".jpg",
-            "text": TEXTS[i],
-            "date_created": TIMES[i],
-            "url": URLS[i],
+            "text": TEXTS[i].split(r'": "')[1],
+            "date_created": (TIMES[i].split(r'": "')[1]).split()[0],
+            "url": URLS[i].split(r'": "')[1],
             "source_type": "Twitter",
         })
 
