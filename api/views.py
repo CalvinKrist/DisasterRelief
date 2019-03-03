@@ -107,6 +107,7 @@ def add_to_database(request):
     # check for optional parameters
     if "date_created" in json_request.keys():
         # date in format in format 2018-12-19
+        print(json_request["date_created"])
         alert.date_created = datetime.strptime(json_request["date_created"], '%Y-%m-%d')
     if "location_name" in json_request.keys():
         alert.location_name = json_request["location_name"]
