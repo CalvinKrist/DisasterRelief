@@ -80,7 +80,7 @@ Some operators have special ways they can be searched besides by `matches`. The 
 
 ### `contains`
 
-For both the `location_name` and `tags` properties, they can be searched based on whether or not they contain a string. The example below returns all objects that have a tag containing the word 'city'.
+For both the `location_name` and `tags` properties, they can be searched based on whether or not they contain a string. The example below returns all objects that have a tag containing the word 'city'. The comparisons are case insensitive.
 
 ```
 {
@@ -92,12 +92,12 @@ For both the `location_name` and `tags` properties, they can be searched based o
 
 ### `within`
 
-This one is unique to the `date_created` parameter. It's used to get all alerts that were created between, or within, two dates. Example:
+This one is unique to the `date_created` parameter. It's used to get all alerts that were created between, or within, two dates. It can accept the `not` logical operator, but not `and` or `or`. Example:
 
 ```
 {
 	"date_created" : {
-		"within" : ["2018-12-19 00:00:00", "2019-11-19 00:00:00"]
+		"within" : ["2018-12-19", "2019-11-19"]
 	}
 }
 ```
