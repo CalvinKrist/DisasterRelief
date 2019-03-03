@@ -1,6 +1,8 @@
 from django.db import models
 from rest_framework.response import Response
 from django.db.models import Q
+from datetime import datetime
+import math
 
 class GeoLocation(models.Model):
     latitude  = models.FloatField()
@@ -184,38 +186,85 @@ class SearchTree:
                     raise SyntaxException("'matches' is a list in 'disaster_type' parameter without operator")
                 return Q(disaster_type=matches_val)
         elif parameter == "date_created":
-            pass
-        elif parameter == "location_name":
-            if "matches" not in param_args:
-                raise SyntaxException("No 'matches' argument in 'location_name' parameter")
-            matches_val = param_args["matches"]
+            arg = "matches"
+            if arg not in param_args:
+                raise SyntaxException("No 'matches' or 'within' argument in 'date_created' parameter")
+            matches_val = param_args[arg]
             if "operator" in param_args:
                 operator = param_args["operator"]
+
+                # Ensure the operator is valid
                 if operator not in self.OPERATORS:
-                    raise SyntaxException("invalid operator " + operator + " in 'location_name'")
+                    raise SyntaxException("invalid operator " + operator + " in 'date_created'")
 
                 if type(matches_val) is not list:
-                    raise SyntaxException("'matches' is not a list in 'location_name' parameter with operator")
+                    raise SyntaxException("'" + arg + "' is not a list in 'date_created' parameter with operator")
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
                     if len(matches_val != 1):
                         raise SyntaxException(
                             "error in 'location_name' child node: 'not' operator used with more than one value")
-                    return ~Q(location_name=matches_val[0])
+                    return ~Q(location_name=matches_val[0]) if arg == "matches" else ~Q(
+                        location_name_icontains=matches_val[0])
 
                 # Handle other operators
-                query = Q(location_name=matches_val[0])
+                dt = datetime.strptime(matches_val[0], '%Y-%m-%d')
+                query = Q(date_created_day=dt.day, date_created_month=dt.month, date_created_year=dt.year)
                 for i in range(1, len(matches_val)):
+                    dt = datetime.strptime(matches_val[i], '%Y-%m-%d')
+                    q = Q(date_created_day=dt.day, date_created_month=dt.month, date_created_year=dt.year)
                     if operator == "and":
-                        query = query & Q(location_name=matches_val[i])
+                        query = query & q
                     elif operator == "or":
-                        query = query | Q(location_name=matches_val[i])
+                        query = query | q
                 return query
             else:
                 if type(matches_val) is list:
-                    raise SyntaxException("'matches' is a list in 'url' parameter without operator")
-                return Q(url=matches_val)
+                    raise SyntaxException("'" + arg + "' is a list in 'location_name' parameter without operator")
+
+                dt = datetime.strptime(matches_val, '%Y-%m-%d')
+                return Q(date_created_day=dt.day, date_created_month=dt.month, date_created_year=dt.year)
+        elif parameter == "location_name":
+            arg = "matches"
+            if arg not in param_args:
+                arg = "contains"
+                if arg not in param_args:
+                    raise SyntaxException("No 'matches' or 'contains' argument in 'location_name' parameter")
+            matches_val = param_args[arg]
+            if "operator" in param_args:
+                operator = param_args["operator"]
+                if operator not in self.OPERATORS:
+                    raise SyntaxException("invalid operator " + operator + " in 'location_name'")
+
+                if type(matches_val) is not list:
+                    raise SyntaxException("'" + arg + "' is not a list in 'location_name' parameter with operator")
+
+                # Handle 'not' operater speratly bcause it can only have one child
+                if operator == "not":
+                    if len(matches_val != 1):
+                        raise SyntaxException(
+                            "error in 'location_name' child node: 'not' operator used with more than one value")
+                    return ~Q(location_name=matches_val[0]) if arg == "matches" else ~Q(location_name_icontains=matches_val[0])
+
+                # Handle other operators
+                query = (Q(location_name=matches_val[0]) if arg == "matches" else Q(location_name_icontains=matches_val[0]))
+                for i in range(1, len(matches_val)):
+                    if operator == "and":
+                        if arg == "matches":
+                            query = query & Q(location_name=matches_val[i])
+                        else:
+                            query = query & Q(location_name_icontains=matches_val[i])
+                    elif operator == "or":
+                        if arg == "matches":
+                            query = query | Q(location_name=matches_val[i])
+                        else:
+                            query = query | Q(location_name_icontains=matches_val[i])
+                return query
+            else:
+                if type(matches_val) is list:
+                    raise SyntaxException("'" + arg + "' is a list in 'location_name' parameter without operator")
+                return Q(location_name=matches_val) if arg == "matches" else Q(location_name_icontains=matches_val)
         elif parameter == "country":
             if "matches" not in param_args:
                 raise SyntaxException("No 'matches' argument in 'country' parameter")
@@ -249,7 +298,67 @@ class SearchTree:
                 return Q(country=matches_val)
         elif parameter == "geo_location":
             # for geolocation, use geo_location_latitude > ...
-            pass
+            if "precision" not in param_args:
+                raise SyntaxException("No 'precision' argument in 'geo_location' parameter")
+            precision = param_args["precision"]
+            if "matches" not in param_args:
+                raise SyntaxException("No 'matches' argument in 'geo_location' parameter")
+            matches_val = param_args["matches"]
+            if "operator" in param_args:
+                operator = param_args["operator"]
+                if operator not in self.OPERATORS:
+                    raise SyntaxException("invalid oeprator " + operator + " in 'geo_location'")
+
+                if type(matches_val) is not list:
+                    raise SyntaxException("'matches' is not a list in 'geo_location' parameter with operator")
+
+                # Handle 'not' operater speratly bcause it can only have one child
+                if operator == "not":
+                    if len(matches_val != 1):
+                        raise SyntaxException("error in 'source_type' child node: 'not' operator used with more than one value")
+                    return ~Q(source_type=matches_val[0])
+
+                # Handle other operators
+                latitude = matches_val[0][0]
+                longitude = matches_val[0][1]
+
+                latitude_floor = math.floor(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                latitude_ceil = math.ceil(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+
+                longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                longitude_ceil = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                query = Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) &\
+                       Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
+                for i in range (1, len(matches_val)):
+                    latitude = matches_val[i][0]
+                    longitude = matches_val[i][1]
+
+                    latitude_floor = math.floor(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                    latitude_ceil = math.ceil(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+
+                    longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                    longitude_ceil = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+
+                    q = Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) &\
+                       Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
+                    if operator == "and":
+                        query = query & q
+                    elif operator == "or":
+                        query = query | q
+                return query
+            else:
+                if type(matches_val) is list:
+                    raise SyntaxException("'matches' is a list in 'geo_location' parameter without operator")
+                latitude  = matches_val[0]
+                longitude = matches_val[1]
+
+                latitude_floor  = math.floor(latitude * 10**(precision - 1)) / (10**(precision - 1))
+                latitude_ceil = math.ceil(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+
+                longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                longitude_ceil  = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                return Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) &\
+                       Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
         elif parameter == "disaster_severity":
             if "matches" not in param_args:
                 raise SyntaxException("No 'matches' argument in 'disaster_severity' parameter")
@@ -282,36 +391,45 @@ class SearchTree:
                     raise SyntaxException("'matches' is a list in 'disaster_severity' parameter without operator")
                 return Q(disaster_severity=matches_val)
         elif parameter == "tags":
-            if "matches" not in param_args:
-                raise SyntaxException("No 'matches' argument in 'tags' parameter")
-            matches_val = param_args["matches"]
+            arg = "matches"
+            if arg not in param_args:
+                arg = "contains"
+                if arg not in param_args:
+                    raise SyntaxException("No 'matches' or 'contains' argument in 'tags' parameter")
+            matches_val = param_args[arg]
             if "operator" in param_args:
                 operator = param_args["operator"]
                 if operator not in self.OPERATORS:
                     raise SyntaxException("invalid operator " + operator + " in 'tags'")
 
                 if type(matches_val) is not list:
-                    raise SyntaxException("'matches' is not a list in 'tags' parameter with operator")
+                    raise SyntaxException("'" + arg + "' is not a list in 'tags' parameter with operator")
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
                     if len(matches_val != 1):
                         raise SyntaxException(
                             "error in 'tags' child node: 'not' operator used with more than one value")
-                    return ~Q(tags=matches_val[0])
+                    return ~Q(tags=matches_val[0]) if arg == "matches" else ~Q(tags_icontains=matches_val[0])
 
                 # Handle other operators
-                query = Q(tags=matches_val[0])
+                query = (Q(tags=matches_val[0]) if arg == "matches" else Q(tags_icontains=matches_val[0]))
                 for i in range(1, len(matches_val)):
                     if operator == "and":
-                        query = query & Q(tags=matches_val[i])
+                        if arg == "matches":
+                            query = query & Q(tags=matches_val[i])
+                        else:
+                            query = query & Q(tags_icontains=matches_val[i])
                     elif operator == "or":
-                        query = query | Q(tags=matches_val[i])
+                        if arg == "matches":
+                            query = query | Q(tags=matches_val[i])
+                        else:
+                            query = query | Q(tags_icontains=matches_val[i])
                 return query
             else:
                 if type(matches_val) is list:
-                    raise SyntaxException("'matches' is a list in 'tags' parameter without operator")
-                return Q(tags=matches_val)
+                    raise SyntaxException("'" + arg + "' is a list in 'tags' parameter without operator")
+                return Q(tags=matches_val) if arg == "matches" else Q(tags_icontains=matches_val)
         else:
             raise SyntaxException("PANIC SHOULDN'T BE HERE CHILD NODE")
 

@@ -80,7 +80,7 @@ Some operators have special ways they can be searched besides by `matches`. The 
 
 ### `contains`
 
-For both the `location_name` and `tags` properties, they can be searched based on whether or not they contain a string. The example below returns all objects that have a tag containing the word 'city'.
+For both the `location_name` and `tags` properties, they can be searched based on whether or not they contain a string. The example below returns all objects that have a tag containing the word 'city'. The comparisons are case insensitive.
 
 ```
 {
@@ -90,21 +90,9 @@ For both the `location_name` and `tags` properties, they can be searched based o
 }
 ```
 
-### `within`
-
-This one is unique to the `date_created` parameter. It's used to get all alerts that were created between, or within, two dates. Example:
-
-```
-{
-	"date_created" : {
-		"within" : ["2018-12-19 00:00:00", "2019-11-19 00:00:00"]
-	}
-}
-```
-
 ### `precision`
 
-This keyword applies for the `geo_location` parameter. For GPS coordinates, it's often unwieldy to search for exact coordinates. Instead, you can search to within a certain decimal precision. The example below searches to the second decimal place, so the coordinates (30.1234, 30.5678) would be treated as (30.12, 30.57) for the purposes of the search. Note that the numbers do get rounded.
+This keyword applies for the `geo_location` parameter. For GPS coordinates,, you are required to search to within a certain decimal precision. The example below searches to the second decimal place, so the coordinates (30.1234, 30.5678) would be treated as (30.12, 30.57) for the purposes of the search. Note that the numbers do get rounded.
 
 ```
 {
