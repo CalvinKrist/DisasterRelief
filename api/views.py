@@ -142,8 +142,8 @@ def add_to_database(request):
         print("tags found: " + json_request["tags"])
         alert.tags = json_request["tags"]
 
-    print("Entry saved to database.")
     alert.save()
+    print("Entry saved to database.")
 
     return Response("Success")
 

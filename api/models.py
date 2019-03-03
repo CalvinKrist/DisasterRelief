@@ -111,20 +111,20 @@ class SearchTree:
                 if operator == "not":
                     if len(matches_val) != 1:
                         raise SyntaxException("error in 'source_type' child node: 'not' operator used with more than one value")
-                    return ~Q(source_type=matches_val[0])
+                    return ~Q(source_type__icontains=matches_val[0])
 
                 # Handle other operators
-                query = Q(source_type=matches_val[0])
+                query = Q(source_type__icontains=matches_val[0])
                 for i in range (1, len(matches_val)):
                     if operator == "and":
-                        query = query & Q(source_type=matches_val[i])
+                        query = query & Q(source_type__icontains=matches_val[i])
                     elif operator == "or":
-                        query = query | Q(source_type=matches_val[i])
+                        query = query | Q(source_type__icontains=matches_val[i])
                 return query
             else:
                 if type(matches_val) is list:
                     raise SyntaxException("'matches' is a list in 'source_type' parameter without operator")
-                return Q(source_type=matches_val)
+                return Q(source_type__icontains=matches_val)
         elif parameter == "url":
             if "matches" not in param_args:
                 raise SyntaxException("No 'matches' argument in 'url' parameter")
