@@ -24,7 +24,7 @@ class AlertList(ListView):
         try:
             json_request = json.loads(request.body)
         except:
-            return Response({"detail": "Invalid request: invalid JSON"})
+            return HttpResponse("<h1> Syntax Error: </h1></br></br><h3>Invalid JSON</h3>")
 
         try:
             query  = models.get_search_from_json(json_request)
@@ -42,6 +42,8 @@ class AlertList(ListView):
             return render(request, self.template_name, context)
         except models.MediaAlert.DoesNotExist:
             return HttpResponse( {} )
+        except models.SyntaxException as e:
+            return HttpResponse("<h1> Syntax Error: </h1></br></br><h3>" + str(e) + "</h3>")
     '''
     def post(self, request, *args, **kwargs):
         request.method = 'GET'

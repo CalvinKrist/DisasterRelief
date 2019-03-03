@@ -109,7 +109,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException("error in 'source_type' child node: 'not' operator used with more than one value")
                     return ~Q(source_type=matches_val[0])
 
@@ -139,7 +139,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException(
                             "error in 'url' child node: 'not' operator used with more than one value")
                     return ~Q(url=matches_val[0])
@@ -170,7 +170,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException(
                             "error in 'disaster_type' child node: 'not' operator used with more than one value")
                     return ~Q(disaster_type=matches_val[0])
@@ -204,7 +204,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException(
                             "error in 'location_name' child node: 'not' operator used with more than one value")
                     return ~Q(location_name=matches_val[0]) if arg == "matches" else ~Q(
@@ -244,29 +244,29 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException(
                             "error in 'location_name' child node: 'not' operator used with more than one value")
-                    return ~Q(location_name=matches_val[0]) if arg == "matches" else ~Q(location_name_icontains=matches_val[0])
+                    return ~Q(location_name=matches_val[0]) if arg == "matches" else ~Q(location_name__icontains=matches_val[0])
 
                 # Handle other operators
-                query = (Q(location_name=matches_val[0]) if arg == "matches" else Q(location_name_icontains=matches_val[0]))
+                query = (Q(location_name=matches_val[0]) if arg == "matches" else Q(location_name__icontains=matches_val[0]))
                 for i in range(1, len(matches_val)):
                     if operator == "and":
                         if arg == "matches":
                             query = query & Q(location_name=matches_val[i])
                         else:
-                            query = query & Q(location_name_icontains=matches_val[i])
+                            query = query & Q(location_name__icontains=matches_val[i])
                     elif operator == "or":
                         if arg == "matches":
                             query = query | Q(location_name=matches_val[i])
                         else:
-                            query = query | Q(location_name_icontains=matches_val[i])
+                            query = query | Q(location_name__icontains=matches_val[i])
                 return query
             else:
                 if type(matches_val) is list:
                     raise SyntaxException("'" + arg + "' is a list in 'location_name' parameter without operator")
-                return Q(location_name=matches_val) if arg == "matches" else Q(location_name_icontains=matches_val)
+                return Q(location_name=matches_val) if arg == "matches" else Q(location_name__icontains=matches_val)
         elif parameter == "country":
             if "matches" not in param_args:
                 raise SyntaxException("No 'matches' argument in 'country' parameter")
@@ -281,7 +281,7 @@ class SearchTree:
 
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
-                    if len(matches_val != 1):
+                    if len(matches_val) != 1:
                         raise SyntaxException(
                             "error in 'country' child node: 'not' operator used with more than one value")
                     return ~Q(country=matches_val[0])
@@ -314,11 +314,25 @@ class SearchTree:
                 if type(matches_val) is not list:
                     raise SyntaxException("'matches' is not a list in 'geo_location' parameter with operator")
 
+                if type(matches_val[0]) is not tuple or type(matches_val[0][0]) is not float:
+                    raise SyntaxException("values of GPS points in 'geo_location' invalid")
+
                 # Handle 'not' operater speratly bcause it can only have one child
                 if operator == "not":
                     if len(matches_val != 1):
                         raise SyntaxException("error in 'source_type' child node: 'not' operator used with more than one value")
-                    return ~Q(source_type=matches_val[0])
+                    latitude = matches_val[0][0]
+                    longitude = matches_val[0][1]
+
+                    latitude_floor = math.floor(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                    latitude_ceil = math.ceil(latitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+
+                    longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+                    longitude_ceil = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
+
+                    query = Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) & \
+                            Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
+                    return ~query
 
                 # Handle other operators
                 latitude = matches_val[0][0]
@@ -329,8 +343,8 @@ class SearchTree:
 
                 longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
                 longitude_ceil = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
-                query = Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) &\
-                       Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
+                query = Q(geo_location__latitude__gte=latitude_floor) & Q(geo_location__latitude_lte=latitude_ceil) &\
+                       Q(geo_location__longitude__gte=longitude_floor) & Q(geo_location__longitude_lte=longitude_ceil)
                 for i in range (1, len(matches_val)):
                     latitude = matches_val[i][0]
                     longitude = matches_val[i][1]
@@ -341,16 +355,21 @@ class SearchTree:
                     longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
                     longitude_ceil = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
 
-                    q = Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) &\
-                       Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
+                    q = Q(geo_location__latitude__gte=latitude_floor) & Q(geo_location__latitude__lte=latitude_ceil) &\
+                       Q(geo_location__longitude__gte=longitude_floor) & Q(geo_location__longitude__lte=longitude_ceil)
                     if operator == "and":
                         query = query & q
                     elif operator == "or":
                         query = query | q
                 return query
             else:
-                if type(matches_val) is list:
-                    raise SyntaxException("'matches' is a list in 'geo_location' parameter without operator")
+                if type(matches_val) is not list:
+                    raise SyntaxException("latitude and longitude in 'geo_location' must be in a list")
+                if type(matches_val[0]) is not float and type(matches_val[0]) is not int:
+                    raise SyntaxException("values of GPS points in 'geo_location' must be floats")
+                if len(matches_val) is not 2:
+                    raise SyntaxException("must be two values for GPS point in 'geo_location'")
+
                 latitude  = matches_val[0]
                 longitude = matches_val[1]
 
@@ -359,8 +378,8 @@ class SearchTree:
 
                 longitude_floor = math.floor(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
                 longitude_ceil  = math.ceil(longitude * 10 ** (precision - 1)) / (10 ** (precision - 1))
-                return Q(geo_location_latitude_gte=latitude_floor) & Q(geo_location_latitude_lte=latitude_ceil) &\
-                       Q(geo_location_longitude_gte=longitude_floor) & Q(geo_location_longitude_lte=longitude_ceil)
+                return Q(geo_location__latitude__gte=latitude_floor) & Q(geo_location__latitude__lte=latitude_ceil) &\
+                       Q(geo_location__longitude__gte=longitude_floor) & Q(geo_location__longitude__lte=longitude_ceil)
         elif parameter == "disaster_severity":
             if "matches" not in param_args:
                 raise SyntaxException("No 'matches' argument in 'disaster_severity' parameter")
@@ -412,26 +431,26 @@ class SearchTree:
                     if len(matches_val != 1):
                         raise SyntaxException(
                             "error in 'tags' child node: 'not' operator used with more than one value")
-                    return ~Q(tags=matches_val[0]) if arg == "matches" else ~Q(tags_icontains=matches_val[0])
+                    return ~Q(tags=matches_val[0]) if arg == "matches" else ~Q(tags__icontains=matches_val[0])
 
                 # Handle other operators
-                query = (Q(tags=matches_val[0]) if arg == "matches" else Q(tags_icontains=matches_val[0]))
+                query = (Q(tags=matches_val[0]) if arg == "matches" else Q(tags__icontains=matches_val[0]))
                 for i in range(1, len(matches_val)):
                     if operator == "and":
                         if arg == "matches":
                             query = query & Q(tags=matches_val[i])
                         else:
-                            query = query & Q(tags_icontains=matches_val[i])
+                            query = query & Q(tags__icontains=matches_val[i])
                     elif operator == "or":
                         if arg == "matches":
                             query = query | Q(tags=matches_val[i])
                         else:
-                            query = query | Q(tags_icontains=matches_val[i])
+                            query = query | Q(tags__icontains=matches_val[i])
                 return query
             else:
                 if type(matches_val) is list:
                     raise SyntaxException("'" + arg + "' is a list in 'tags' parameter without operator")
-                return Q(tags=matches_val) if arg == "matches" else Q(tags_icontains=matches_val)
+                return Q(tags=matches_val) if arg == "matches" else Q(tags__icontains=matches_val)
         else:
             raise SyntaxException("PANIC SHOULDN'T BE HERE CHILD NODE")
 
