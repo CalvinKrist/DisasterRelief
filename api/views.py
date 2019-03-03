@@ -100,6 +100,7 @@ def add_to_database(request):
     if "disaster_type" not in json_request.keys():
         json["disaster_type"] = ""
 
+    print("disatstor type: " + json_request["disaster_type"])
     # Save request to database
     alert = models.MediaAlert(source_type=json_request["source_type"],
                               url=json_request["url"], disaster_type=json_request["disaster_type"])
