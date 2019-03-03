@@ -466,10 +466,11 @@ def handle_search_from_json(search_query):
 
             list_result = list(result.values())
             for result in list_result:
-                geo_model = GeoLocation.objects.get(id=result["geo_location_id"])
-                geo_model_json = serializers.serialize("json", [geo_model])
-                result["geo_location"] = json.loads(geo_model_json)
-                del result["geo_location_id"]
+                if "geo_location_id" in result:
+                    geo_model = GeoLocation.objects.get(id=result["geo_location_id"])
+                    geo_model_json = serializers.serialize("json", [geo_model])
+                    result["geo_location"] = json.loads(geo_model_json)
+                    del result["geo_location_id"]
 
             dict_result = {}
             for i in range(0, len(list_result)):
