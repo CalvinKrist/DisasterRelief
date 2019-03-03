@@ -1,6 +1,7 @@
 import re
 import os
 import subprocess
+import /Image-Classification-Final-Suite/image-classification/scripts/consolidated.py
 
 subprocess.call("./scrapeTweets.sh")
 
@@ -44,5 +45,9 @@ for i in range(0, len(PIC_URLS)):
         "url": URLS[i],
         "media_type": "Twitter"
     }
+for dict in (RESP):
+    image = (os.path.join(os.getcwd(), 'media_images/' + dict["pic"]))
+    
+
 
 # subprocess.call('./deleteImages.sh')
