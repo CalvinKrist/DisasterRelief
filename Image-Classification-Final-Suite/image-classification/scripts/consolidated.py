@@ -192,10 +192,10 @@ if __name__ == "__main__":
     severity = tens_Two(path)
 
     tweet.update({
-      'location': location,
+      'location_name': location,
       'disaster_type': disaster_tags,
       'tags': other_tags,
-      'severity': severity,
+      'disaster_severity': severity,
     })
 
     response = requests.post(url, data=json.loads(json.dumps(tweet)))

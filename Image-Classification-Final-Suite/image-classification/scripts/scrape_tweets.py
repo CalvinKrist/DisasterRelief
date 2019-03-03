@@ -46,9 +46,9 @@ def scrape():
         RESP.append({
             "pic": "img" + str(i+1) + ".jpg",
             "text": TEXTS[i],
-            "time": TIMES[i],
+            "date_created": TIMES[i],
             "url": URLS[i],
-            "media_type": "Twitter",
+            "source_type": "Twitter",
         })
 
     return RESP
