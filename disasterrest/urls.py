@@ -28,6 +28,8 @@ urlpatterns = [
     path('api/searchWeb/', views.search_database_web),
     path('home', views.get_home),
     path('home/', views.get_home),
+    path('', views.get_home),
+    path('/', views.get_home),
     path('search', views.get_search),
     path('search/', views.get_search),
     url(r'^([\s\S]*)$', views.web_resource),
