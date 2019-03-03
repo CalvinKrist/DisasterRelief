@@ -6,6 +6,10 @@ from __future__ import print_function
 import argparse
 import sys
 import time
+import os
+import requests
+import json
+from geo import geodict_lib
 
 import numpy as np
 import tensorflow as tf
@@ -23,6 +27,7 @@ def run_quickstart(file_name):
     from google.cloud.vision import types
     
     # Instantiates a client
+    os.environ["GOOGLE_APPLICATION_CREDENTIALS"]="/home/osboxes/hoohacks/halogen-oxide-233408-a42829cf139a.json"
     client = vision.ImageAnnotatorClient()
 
     
@@ -45,8 +50,8 @@ def run_quickstart(file_name):
         else:
             labelsTags.append(label.description)
 
-    labelsFiltStr = ','.join(labelsFiltered.split(", "))
-    labelsTagsStr = ','.join(labelsFiltered.split(", "))
+    labelsFiltStr = ','.join(str(labelsFiltered).split(", "))
+    labelsTagsStr = ','.join(str(labelsTags).split(", "))
     
     return labelsFiltStr, labelsTagsStr
 
@@ -94,6 +99,42 @@ def load_labels(label_file):
     label.append(l.rstrip())
   return label
 
+def tens_Two(file_name):
+  graph = load_graph(model_file)
+  t = read_tensor_from_image_file(file_name,
+                                  input_height=input_height,
+                                  input_width=input_width,
+                                  input_mean=input_mean,
+                                  input_std=input_std)
+
+  input_name = "import/" + input_layer
+  output_name = "import/" + output_layer
+  input_operation = graph.get_operation_by_name(input_name)
+  output_operation = graph.get_operation_by_name(output_name)
+
+  with tf.Session(graph=graph) as sess:
+    start = time.time()
+    results = sess.run(output_operation.outputs[0],
+                      {input_operation.outputs[0]: t})
+    end=time.time()
+  results = np.squeeze(results)
+
+  top_k = results.argsort()[-5:][::-1]
+  labels = load_labels(label_file)
+
+  print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
+  template = "{} (score={:0.5f})"
+
+  for i in top_k:
+    print(template.format(labels[i], results[i]))
+
+  maxResult = max(results)
+
+  for j in range(0, len(results)):
+    if (results[j]==maxResult):
+        condition = labels[j]
+
+  return condition
 
 if __name__ == "__main__":
 
@@ -138,51 +179,23 @@ if __name__ == "__main__":
   if args.output_layer:
     output_layer = args.output_layer
 
+  url = 'https://hoos-disaster-relief.herokuapp.com/api/add'
   tweets = scrape()
   for tweet in tweets:
+    # location not currently working
+    # location = geodict_lib.find_locations_in_text(tweet["text"])
+    location = ""
     path = os.path.join(os.getcwd(), "media_images/" + tweet["pic"])
-    print(run_quickstart(path))
-    print(tens_Two(path))
+    tags = run_quickstart(path)
+    disaster_tags = tags[0]
+    other_tags = tags[1]
+    severity = tens_Two(path)
 
+    tweet.update({
+      'location': location,
+      'disaster_type': disaster_tags,
+      'tags': other_tags,
+      'severity': severity,
+    })
 
-
-def tens_Two(file_name):
-  graph = load_graph(model_file)
-  t = read_tensor_from_image_file(file_name,
-                                  input_height=input_height,
-                                  input_width=input_width,
-                                  input_mean=input_mean,
-                                  input_std=input_std)
-
-  input_name = "import/" + input_layer
-  output_name = "import/" + output_layer
-  input_operation = graph.get_operation_by_name(input_name)
-  output_operation = graph.get_operation_by_name(output_name)
-
-  with tf.Session(graph=graph) as sess:
-    start = time.time()
-    results = sess.run(output_operation.outputs[0],
-                      {input_operation.outputs[0]: t})
-    end=time.time()
-  results = np.squeeze(results)
-
-  top_k = results.argsort()[-5:][::-1]
-  labels = load_labels(label_file)
-
-  print('\nEvaluation time (1-image): {:.3f}s\n'.format(end-start))
-  template = "{} (score={:0.5f})"
-
-  for i in top_k:
-    print(template.format(labels[i], results[i]))
-
-  maxResult = max(results)
-
-  for j in range(0, len(results)):
-    if (results[j]==maxResult):
-        condition = labels[j]
-
-  return condition
-
-
-
-
+    response = requests.post(url, data=json.loads(json.dumps(tweet)))
