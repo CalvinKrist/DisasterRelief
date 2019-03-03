@@ -5,6 +5,8 @@ import api.models as models
 from datetime import datetime
 
 # Used to search the database with JSON object
+# Returns the objects as a JSON.
+# For use by other developers
 @api_view(['POST'])
 def search_database(request):
     # Make sure query isn't empty
@@ -74,4 +76,27 @@ def add_to_database(request):
 
     return Response()
 
+# Used to search the database with JSON object
+# Retuns HTML. Intended to be used as a website page.
+@api_view(['POST'])
+def search_database_web(request):
+    # Make sure query isn't empty
+    if request.body == b'':
+        return Response( {"detail" : "Invalid request: empty request"} )
 
+    if request.method == 'POST':
+        # Load request as a dict object
+        json_request = None
+        try:
+            json_request = json.loads(request.body)
+        except:
+            return Response( {"detail" : "Invalid request: invalid JSON"} )
+
+        return models.handle_search_from_json(json_request)
+
+    '''elif request.metod == 'GET':
+        # Make sure query isn't empty
+        if request.body == b'':
+            return Response({"detail": "Invalid request: empty request"})
+
+        return models.handle_search_from_string(request.body)'''

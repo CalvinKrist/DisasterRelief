@@ -19,8 +19,10 @@ import api.views as views
 
 urlpatterns = [
     path('admin/', admin.site.urls),
-    path('search', views.search_database),
-    path('search/', views.search_database),
+    path('api/search', views.search_database),
+    path('api/search/', views.search_database),
     path('api/add', views.add_to_database),
-    path('api/add/', views.add_to_database)
+    path('api/add/', views.add_to_database),
+    path('search', views.search_database_web),
+    path('search/', views.search_database_web),
 ]
