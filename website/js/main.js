@@ -3,7 +3,7 @@ function updateSearchPage() {
 	searchQuery   = searchTextBox.value;
 	
 	var xhr = new XMLHttpRequest();
-	xhr.open("POST", "/api/searchWeb", true);
+	xhr.open("POST", "https://hoos-disaster-relief.herokuapp.com/api/searchWeb", true);
 	xhr.setRequestHeader('Content-type','application/json; charset=utf-8');
 	xhr.onload = function (e) {
 	  if (xhr.readyState === 4) {
