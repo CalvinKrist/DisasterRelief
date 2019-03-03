@@ -11,6 +11,7 @@
 		<!-- Material Design for Bootstrap CSS -->
 		<link rel="stylesheet" href="https://unpkg.com/bootstrap-material-design@4.1.1/dist/css/bootstrap-material-design.min.css" integrity="sha384-wXznGJNEXNG1NFsbm0ugrLFMQPWswR3lds2VeinahP8N0zJw9VWSopbjv2x7WCvX" crossorigin="anonymous">
 
+		<!-- Project Title: Clear Skies, top left-->
 		<title>Clear Skies</title>
 		
 		<style type="text/css">
@@ -23,15 +24,18 @@
 	<!-- jQuery first, then Popper.js, then Bootstrap JS -->
 	<script src="https://unpkg.com/popper.js@1.12.6/dist/umd/popper.js"></script>
 	<script src="https://unpkg.com/bootstrap-material-design@4.1.1/dist/js/bootstrap-material-design.js"></script>
-
+	<!--container that contains main contents of webpage-->
 	<div class="cover-container d-flex h-100 mx-auto flex-column">
 		<header >
+			<!--Navigation bar with home and search fields -->
 			<nav id="main-nav-bar" class="nav navbar sticky-top navbar-expand-lg navbar-dark bg-success" style="background-color: #e3f2fd;">
+				<!-- Sub container class with Clear Skies logo-->
 				<div class="container">
 					<a class="navbar-brand" href="home">
 						<img src="images/logo.png" width="50" height="50" class="d-inline-block align-middle" alt="">
 						Clear Skies
 					</a>
+					<!--Navigation bar with button toggle functionality-->
 					<button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarColor01" aria-controls="navbarColor01" aria-expanded="false" aria-label="Toggle navigation">
 						<span class="navbar-toggler-icon"></span>
 					</button>
@@ -39,6 +43,7 @@
 					<div class="collapse navbar-collapse" id="navbarColor01">
 						<ul class="navbar-nav mr-auto">
 							<li class="nav-item">
+								<!--Navigation bar 'home' and 'search' fields-->
 								<a class="nav-link" href='home'); id="home-page-link">Home</a>
 							</li>
 							<li class="nav-item active">
@@ -58,9 +63,9 @@
 			<h3 class="float-left"> Schema </h2>
 			</br></br>
 			
-			API requests are all consist of <code>POST</code> requests that send a JSON object to the <code>api/search</code> endpoint. The JSON objects enable the expression of complicated logical operations so that they can query for exactly the data they need.
+			API requests all consist of <code>POST</code> requests that send a JSON object to the <code>api/search</code> endpoint. The JSON objects enable the expression of complicated logical operations so that they can query for exactly the data they need.</br>
 			
-			The basic format of a request is a parameter followed by one or more arguments. 
+			1. The basic format of a request is a parameter followed by one or more arguments. 
 			<code>
 			<p>
 			{
@@ -70,6 +75,69 @@
 			}
 			</p>
 			</code>
+			2. A simple example of an argument "matches" and a value "facebook" is shown below:
+			<code>
+				<p>
+						{
+							"source_type" : {
+								"matches" : "facebook"
+							}
+						}
+				</p>
+			</code>
+			3. Another simple example is to search for all alerts that come from both facebook and twitter. This requires two instantiations of the format detailed above: 
+			<code>
+				<p>
+						{
+							"operator" : "or",
+							"queries" : [
+								{
+									"source_type" : {
+										"matches" : "facebook"
+									}
+								},
+								{
+									"source_type" : {
+										"matches" : "twitter"
+									}
+								},
+							],
+						}
+				</p>
+			</code>
+			4. This format, however, does not work for longer lists of values so there is a syntactical shorthand that can be used where within the parameter an operator is given and then a list of values as detailed in the example below: 
+			<code>
+				<p>
+						{
+							"source_type" : {
+								"operator" : "or",
+								"matches" : ["twitter", "facebook"]
+							}
+						}
+				</p>
+			</code>
+			5. The standard format can also be expanded to include multiple arguments for specific values:
+			<code>
+				<p>
+						{
+							"operator" : "and",
+							"queries" : [
+								{
+									"source_type" : {
+										"matches" : "twitter"
+									}
+								},
+								{
+									"country" : {
+										"operator" = "or",
+										"matches" : ["Mexico", "Puerto Rico"]
+									}
+								}
+							]
+						}
+				</p>
+			</code>
+			6. The queries can also be defined by arguments other than "matches"
 			<div class="form-group">
 				<h2> Query the API </h2>
 				<textarea class="form-control" id="searchRequestBox" rows="3"></textarea>
