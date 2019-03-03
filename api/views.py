@@ -34,14 +34,21 @@ class AlertList(ListView):
 
             # Replace geo_location objects with actual values. drop id
             for result in list_result:
-                result["geo_location"] = models.GeoLocation.objects.get(id=result["geo_location_id"])
-                del result["geo_location_id"]
+                if "geo_location_id" in result:
+                    try:
+                        result["geo_location"] = models.GeoLocation.objects.get(id=result["geo_location_id"])
+                    except:
+                        pass
 
             context = {'alert_list' : list_result}
 
+            print("rendinering")
+
+            if len(list_result) == 0:
+                return HttpResponse("<h1>No Results Found<h1>")
             return render(request, self.template_name, context)
-        except models.MediaAlert.DoesNotExist:
-            return HttpResponse( {} )
+        except models.MediaAlert.DoesNotExist as e:
+            return HttpResponse( "MediaAlter Does not Exist: " + str(e) )
         except models.SyntaxException as e:
             return HttpResponse("<h1> Syntax Error: </h1></br></br><h3>" + str(e) + "</h3>")
     '''
@@ -100,6 +107,7 @@ def add_to_database(request):
     if "disaster_type" not in json_request.keys():
         json["disaster_type"] = ""
 
+    print("disatstor type: " + json_request["disaster_type"])
     # Save request to database
     alert = models.MediaAlert(source_type=json_request["source_type"],
                               url=json_request["url"], disaster_type=json_request["disaster_type"])
@@ -107,23 +115,34 @@ def add_to_database(request):
     # check for optional parameters
     if "date_created" in json_request.keys():
         # date in format in format 2018-12-19
-        alert.date_created = datetime.strptime(json_request["date_created"], '%Y-%m-%d')
+        try:
+            alert.date_created = datetime.strptime(json_request["date_created"], '%Y-%m-%d')
+        except Exception as  e:
+            print(json_request["date_created"])
+            print("dateimte format " + str(json_request["date_created"]) + " incorrect: " + str(e))
+            return Response("dateimte format " + json_request["date_created"] + " incorrect: " + str(e))
     if "location_name" in json_request.keys():
+        print("location_name found: " + json_request["location_name"])
         alert.location_name = json_request["location_name"]
     if "country" in json_request.keys():
+        print("country found: " + json_request["country"])
         alert.country = json_request["country"]
     # Request in format "latitude,longitude"
     if "geo_location" in json_request.keys():
+        print("geo_location found: " + json_request["geo_location"])
         points = json_request["geo_location"]
         geo_model = models.GeoLocation(latitude=points[0], longitude=points[1])
         geo_model.save()
         alert.geo_location = geo_model
     if "disaster_severity" in json_request.keys():
+        print("disaster_severity found: " + json_request["disaster_severity"])
         alert.disaster_severity = json_request["disaster_severity"]
     if "tags" in json_request.keys():
+        print("tags found: " + json_request["tags"])
         alert.tags = json_request["tags"]
 
     alert.save()
+    print("Entry saved to database.")
 
     return Response("Success")
 

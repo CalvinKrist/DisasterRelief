@@ -17,23 +17,23 @@
 </style>
 
 {% block content %}
-<h2>Alerts</h2>
 <ul>
 	{% for alert in alert_list %}
 	<div class="card">
 		<div class="container">
-			<p>{{ alert.id }}</p>
-			<p>{{ alert.source_type }}</p>
-			<p>{{ alert.url }}</p>
-			<p>{{ alert.disaster_type }}</p>
-			<p>{{ alert.date_created }}</p>
-			<p>{{ alert.location_name }}</p>
-			<p>{{ alert.country }}</p>
-			<p>{{ alert.geo_location.latitude }}, {{ alert.geo_location.longitude }}</p>
-			<p>{{ alert.disaster_severity }}</p>
-			<p>{{ alert.tags }}</p>
+			<h2>Alert {{ alert.id }}</h2>
+			<p><h4>Source type:</h4> {{ alert.source_type }}</p>
+			<p><h4>URL:</h4> {{ alert.url }}</p>
+			<p><h4>Disaster type:</h4> {{ alert.disaster_type }}</p>
+			<p>Date created: {{ alert.date_created }}</p>
+			<p>Location: {{ alert.location_name }}</p>
+			<p>Country: {{ alert.country }}</p>
+			<p>Geolocation: ({{ alert.geo_location.latitude }}, {{ alert.geo_location.longitude }})</p>
+			<p>Disaster Severity: {{ alert.disaster_severity }}</p>
+			<p>Tags: {{ alert.tags }}</p>
 		</div>
 	</div>
+	</br>
 	{% endfor %}
 </ul>
 {% endblock %}

@@ -10,7 +10,6 @@ function updateSearchPage() {
 		if (xhr.status === 200) {
 		  responseBox = document.getElementById("searchResponse");
 		  responseBox.innerHTML = xhr.responseText;
-		  console.log(xhr.responseText);
 		} else {
 		  console.error(xhr.statusText);
 		}

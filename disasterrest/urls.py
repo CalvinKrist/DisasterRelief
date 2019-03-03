@@ -31,7 +31,7 @@ urlpatterns = [
     path('home/', views.get_home),
     path('', views.get_home),
     path('/', views.get_home),
-    path('search', views.get_search),
-    path('search/', views.get_search),
+    path('tutorial', views.get_search),
+    path('tutorial/', views.get_search),
     url(r'^([\s\S]*)$', views.web_resource),
 ]

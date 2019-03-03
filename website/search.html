@@ -31,7 +31,7 @@
 			<nav id="main-nav-bar" class="nav navbar sticky-top navbar-expand-lg navbar-dark bg-success" style="background-color: #e3f2fd;">
 				<!-- Sub container class with Clear Skies logo-->
 				<div class="container">
-					<a class="navbar-brand" href="home">
+					<a class="navbar-brand" href="/home">
 						<img src="images/logo.png" width="50" height="50" class="d-inline-block align-middle" alt="">
 						Clear Skies
 					</a>
@@ -44,10 +44,10 @@
 						<ul class="navbar-nav mr-auto">
 							<li class="nav-item">
 								<!--Navigation bar 'home' and 'search' fields-->
-								<a class="nav-link" href='home'); id="home-page-link">Home</a>
+								<a class="nav-link" href='/home'; id="home-page-link">Home</a>
 							</li>
 							<li class="nav-item active">
-								<a class="nav-link" href='search'; id="config-page-link">Search<span class="sr-only" id="selected-nav-page">(current)</span></a>
+								<a class="nav-link" href='/tutorial'; id="config-page-link">Tutorial<span class="sr-only" id="selected-nav-page">(current)</span></a>
 							</li>
 						</ul>
 					</div>
@@ -58,7 +58,7 @@
 		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">
 			<!-- real url: https://hoos-disaster-relief.herokuapp.com/ -->
 			
-			<h1 class="float-left"> API Documentation </h1>
+			<h1 class="float-left"> Searching Tutorial </h1>
 			
 			</br></br><hr class="style1">
 			<h3 class="float-left"> Schema </h2>
@@ -139,12 +139,36 @@
 							}<br>
 					</p>
 				</code>
-				6. The queries can also be defined by arguments other than "matches"
-				
+				6. The queries can also be defined by arguments other than <code>matches</code>. </br></br>
+				7. Argument: <code>CONTAINS</code> can be used for both the <code>location_name</code> and the <code>tags</code> properties, they can be searched based on whether or not they contain a string. The example below returns all objects that have a tag containing the word 'city'. The comparisons are case insensitive.
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"tags" : {<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"contains" : "city"<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+					</p>
+				</code>
+				8. Argument: <code>PRECISION</code> can be applied for the <code>geo_location</code> parameter. For GPS coordinates,, you are required to search to within a certain decimal precision. The example below searches to the second decimal place, so the coordinates (30.1234, 30.5678) would be treated as (30.12, 30.57) for the purposes of the search. Note that the numbers do get rounded.
+				<code>
+					<p>
+							{<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;"geo_location" : {<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"precision" : 2,<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"operator" : 2,<br>
+								&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;"matches" : [(28.45, 42.11), (11.11, 12.12), (16.25, 25.16)]<br>
+									&nbsp;&nbsp;&nbsp;&nbsp;}<br>
+							}<br>
+					</p>
+				</code>
+
+			Below is a live tool that allows you to submit live JSON queries and see the result. This could be helpful for debugging your own code, or just for learning more about the syntax of the queries. We highly encourage you to play around with it!
 			</div>
+			<br>
 			<div class="form-group">
 				<h2> Query the API </h2>
-				<textarea class="form-control" id="searchRequestBox" rows="5"></textarea>
+				<textarea class="form-control" id="searchRequestBox" rows="6"></textarea>
 				<button class="btn btn-lg btn-primary btn-block" onclick="updateSearchPage();">Search</button>
 			</div>
 			
@@ -152,6 +176,7 @@
 				
 			</div>
 			
+		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">			
 		
 		<footer class="mastfoot mt-auto navbar-fixed-bottom" id="document-footer">
 		</footer>
