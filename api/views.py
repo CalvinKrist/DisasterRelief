@@ -109,8 +109,10 @@ def add_to_database(request):
         # date in format in format 2018-12-19
         try:
             alert.date_created = datetime.strptime(json_request["date_created"], '%Y-%m-%d')
-        except:
-            return Response("dateimte format " + json_request["date_created"] + " incorrect.")
+        except Exception as  e:
+            print(json_request["date_created"])
+            print("dateimte format " + json_request["date_created"] + " incorrect: " + str(e))
+            return Response("dateimte format " + json_request["date_created"] + " incorrect: " + str(e))
     if "location_name" in json_request.keys():
         alert.location_name = json_request["location_name"]
     if "country" in json_request.keys():

@@ -17,7 +17,6 @@
 </style>
 
 {% block content %}
-<h2>Alerts</h2>
 <ul>
 	{% for alert in alert_list %}
 	<div class="card">
@@ -34,7 +33,7 @@
 			<p>{{ alert.tags }}</p>
 		</div>
 	</div>
-	<hr>
+	</br>
 	{% endfor %}
 </ul>
 {% endblock %}
