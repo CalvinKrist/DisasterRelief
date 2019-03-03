@@ -98,7 +98,7 @@ def add_to_database(request):
     if "url" not in json_request.keys():
         return Response({'detail' : "missing url"})
     if "disaster_type" not in json_request.keys():
-        return Response({'detail' : "missing disaster_type"})
+        json["disaster_type"] = ""
 
     # Save request to database
     alert = models.MediaAlert(source_type=json_request["source_type"],
@@ -125,7 +125,7 @@ def add_to_database(request):
 
     alert.save()
 
-    return Response()
+    return Response("Success")
 
 # Used to search the database with JSON object
 # Retuns HTML. Intended to be used as a website page.

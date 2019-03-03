@@ -53,26 +53,28 @@
 		<div id="content-view" class="container" style="padding-top: 30px; height: 100%;">
 			<!-- real url: https://hoos-disaster-relief.herokuapp.com/ -->
 			
-			<h2 class="float-left"> API Documentation </h2>
-			</br></br>
+			<h1 class="float-left"> API Documentation </h1>
+			
+			</br></br><hr class="style1">
 			<h3 class="float-left"> Schema </h2>
 			</br></br>
 			
 			API requests are all consist of <code>POST</code> requests that send a JSON object to the <code>api/search</code> endpoint. The JSON objects enable the expression of complicated logical operations so that they can query for exactly the data they need.
 			
-			The basic format of a request is a parameter followed by one or more arguments. 
+			The basic format of a request is a parameter followed by one or more arguments.
+			
 			<code>
-			<p>
-			{
-				"parameter" : {
-					"argument" : "value"
-				}
-			}
+			<p class="text-justify">
+			{ <br>
+				"parameter" : { <br>
+					"argument" : "value" <br>
+			    } <br>
+			} <br>
 			</p>
 			</code>
 			<div class="form-group">
 				<h2> Query the API </h2>
-				<textarea class="form-control" id="searchRequestBox" rows="3"></textarea>
+				<textarea class="form-control" id="searchRequestBox" rows="5"></textarea>
 				<button class="btn btn-lg btn-primary btn-block" onclick="updateSearchPage();">Search</button>
 			</div>
 			
