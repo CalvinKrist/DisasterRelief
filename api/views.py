@@ -2,8 +2,54 @@ from rest_framework.decorators import api_view
 from rest_framework.response import Response
 import json
 import api.models as models
+from django.core import serializers
 from datetime import datetime
 from django.http import HttpResponse
+from django.views.generic import ListView
+from django.shortcuts import render
+
+class AlertList(ListView):
+    model = models.MediaAlert
+
+
+
+    template_name = 'api/mediaalert_list.html'
+
+    def get(self, request, *args, **kwargs):
+        if request.body == b'':
+            return HttpResponse({"detail": "Invalid request: empty request"})
+
+        # Load request as a dict object
+        json_request = None
+        try:
+            json_request = json.loads(request.body)
+        except:
+            return Response({"detail": "Invalid request: invalid JSON"})
+
+        try:
+            query  = models.get_search_from_json(json_request)
+            result = models.MediaAlert.objects.filter(query)
+
+            list_result = list(result.values())
+
+            # Replace geo_location objects with actual values. drop id
+            for result in list_result:
+                result["geo_location"] = models.GeoLocation.objects.get(id=result["geo_location_id"])
+                del result["geo_location_id"]
+
+            context = {'alert_list' : list_result}
+
+            return render(request, self.template_name, context)
+        except models.MediaAlert.DoesNotExist:
+            return HttpResponse( {} )
+    '''
+    def post(self, request, *args, **kwargs):
+        request.method = 'GET'
+        return AlertList.as_view()(request)'''
+
+    def post(self, request, *args, **kwargs):
+        request.method = 'GET'
+        return AlertList.as_view()(request)
 
 # Used to search the database with JSON object
 # Returns the objects as a JSON.
@@ -67,7 +113,9 @@ def add_to_database(request):
     # Request in format "latitude,longitude"
     if "geo_location" in json_request.keys():
         points = json_request["geo_location"]
-        alert.geo_location = models.GeoLocation(latitide=points[0], longitude=points[1])
+        geo_model = models.GeoLocation(latitude=points[0], longitude=points[1])
+        geo_model.save()
+        alert.geo_location = geo_model
     if "disaster_severity" in json_request.keys():
         alert.disaster_severity = json_request["disaster_severity"]
     if "tags" in json_request.keys():

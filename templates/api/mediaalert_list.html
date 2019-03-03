@@ -1,0 +1,17 @@
+{% block content %}
+    <h2>Alerts</h2>
+    <ul>
+        {% for alert in alert_list %}
+			<li>{{ alert.id }}</li>
+            <li>{{ alert.source_type }}</li>
+			<li>{{ alert.url }}</li>
+			<li>{{ alert.disaster_type }}</li>
+			<li>{{ alert.date_created }}</li>
+			<li>{{ alert.location_name }}</li>
+			<li>{{ alert.country }}</li>
+			<li>{{ alert.geo_location.latitude }}, {{ alert.geo_location.longitude }}</li>
+			<li>{{ alert.disaster_severity }}</li>
+			<li>{{ alert.tags }}</li>
+        {% endfor %}
+    </ul>
+{% endblock %}

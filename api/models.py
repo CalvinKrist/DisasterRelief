@@ -2,7 +2,9 @@ from django.db import models
 from rest_framework.response import Response
 from django.db.models import Q
 from datetime import datetime
+from django.core import serializers
 import math
+import json
 
 class GeoLocation(models.Model):
     latitude  = models.FloatField()
@@ -433,12 +435,32 @@ class SearchTree:
         else:
             raise SyntaxException("PANIC SHOULDN'T BE HERE CHILD NODE")
 
-def handle_search_from_string(search_query):
-    return Response()
+def get_search_from_json(search_query):
+    search = SearchTree(search_query)
+    return search.root
 
 def handle_search_from_json(search_query):
     try:
         search = SearchTree(search_query)
-        return Response()
+
+        try:
+            result = MediaAlert.objects.filter(search.root)
+
+            list_result = list(result.values())
+            for result in list_result:
+                geo_model = GeoLocation.objects.get(id=result["geo_location_id"])
+                geo_model_json = serializers.serialize("json", [geo_model])
+                result["geo_location"] = json.loads(geo_model_json)
+                del result["geo_location_id"]
+
+            dict_result = {}
+            for i in range(0, len(list_result)):
+                dict_result["model" + str(i)] = list_result[i]
+            print(dict_result)
+            return Response(dict_result)
+
+        except MediaAlert.DoesNotExist:
+            return Response( {} )
+
     except SyntaxException as e:
         return Response( {"detail" : str(e)} )

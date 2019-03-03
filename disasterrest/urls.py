@@ -17,6 +17,7 @@ from django.contrib import admin
 from django.urls import path
 import api.views as views
 from django.conf.urls import url
+from api.views import AlertList
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,8 +25,8 @@ urlpatterns = [
     path('api/search/', views.search_database),
     path('api/add', views.add_to_database),
     path('api/add/', views.add_to_database),
-    path('api/searchWeb', views.search_database_web),
-    path('api/searchWeb/', views.search_database_web),
+    path('api/searchWeb', AlertList.as_view()),
+    path('api/searchWeb/', AlertList.as_view()),
     path('home', views.get_home),
     path('home/', views.get_home),
     path('', views.get_home),
