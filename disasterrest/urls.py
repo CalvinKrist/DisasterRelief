@@ -16,6 +16,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 import api.views as views
+from django.conf.urls import url
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -23,6 +24,11 @@ urlpatterns = [
     path('api/search/', views.search_database),
     path('api/add', views.add_to_database),
     path('api/add/', views.add_to_database),
-    path('search', views.search_database_web),
-    path('search/', views.search_database_web),
+    path('api/searchWeb', views.search_database_web),
+    path('api/searchWeb/', views.search_database_web),
+    path('home', views.get_home),
+    path('home/', views.get_home),
+    path('search', views.get_search),
+    path('search/', views.get_search),
+    url(r'^([\s\S]*)$', views.web_resource),
 ]
